@@ -62,20 +62,22 @@
         .gallery-placeholder { color: #999; text-align: center; font-size: 0.9rem; }
         .gallery-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 999; display: none; align-items: center; justify-content: center; }
+        /* 🛠️ MODAL Y ADMIN PANEL (ARREGLADO PARA EVITAR BLOQUEOS) */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
         .overlay.open { display: flex; }
-        .modal-box { background: #fff; max-width: 450px; width: 100%; border-radius: 24px; padding: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; }
+        .modal-box { background: #fff; max-width: 550px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); position: relative; z-index: 10000; pointer-events: auto; }
         .modal-box h3 { text-align: center; font-family: 'Playfair Display', serif; margin-bottom: 20px; }
 
-        .admin-trigger { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; z-index: 990; color: rgba(0,0,0,0.3); transition: 0.3s; }
+        .admin-trigger { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; z-index: 950; color: rgba(0,0,0,0.3); transition: 0.3s; }
         .admin-trigger:hover { color: #000; }
         .admin-panel { display: none; text-align: left; }
-        .admin-panel label { display: block; font-weight: 600; margin: 12px 0 4px; }
-        .admin-panel input, .admin-panel textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; }
+        .admin-panel label { display: block; font-weight: 600; margin: 10px 0 4px; }
+        .admin-panel input, .admin-panel textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 8px; font-family: 'Inter', sans-serif; color: #2c1e18; pointer-events: auto; }
+        .admin-panel input:focus, .admin-panel textarea:focus { outline: 2px solid var(--red-accent); border: none; }
         .admin-panel .btn-row { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
-        .admin-panel .btn-save { width: 100%; background: var(--text-main); color: #fff; padding: 12px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .admin-panel .btn-save { width: 100%; background: var(--text-main); color: #fff; padding: 12px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 10px; pointer-events: auto; }
         .admin-panel .btn-save:hover { background: var(--red-accent); }
-        .admin-panel .btn-danger { flex: 1; background: #b85a46; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .admin-panel .btn-danger { flex: 1; background: #b85a46; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; pointer-events: auto; }
         .admin-panel .btn-danger:hover { background: #9e4736; }
 
         footer { text-align: center; padding: 40px; background: #2c1e18; color: #888; margin-top: 40px; }
@@ -85,9 +87,9 @@
     <section class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <span class="hero-tag">SALVEMOS A KIARA • JUNIO 2026</span>
-            <h1>Ella confía en que <span>no la vamos a dejar.</span></h1>
-            <p>Kiara tiene una masa en el bazo y líquido en el abdomen. El proceso será largo. Su cuerpo trabaja en la tierra y su espíritu en la eternidad. No la dejaremos sola.</p>
+            <span class="hero-tag" id="text-hero-tag">SALVEMOS A KIARA • JUNIO 2026</span>
+            <h1 id="text-hero-title">Ella confía en que <span>no la vamos a dejar.</span></h1>
+            <p id="text-hero-desc">Kiara tiene una masa en el bazo y líquido en el abdomen. El proceso será largo. Su cuerpo trabaja en la tierra y su espíritu en la eternidad. No la dejaremos sola.</p>
             <a href="#transparencia" class="btn-primary">Apoya a Kiara</a>
         </div>
     </section>
@@ -104,14 +106,14 @@
 
     <div class="container" id="historia">
         <div class="section-header">
-            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">Lo que pasó</span>
-            <h2>Kiara, la noche que nos cambió todo</h2>
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;" id="text-history-label">Lo que pasó</span>
+            <h2 id="text-history-title">Kiara, la noche que nos cambió todo</h2>
         </div>
         <div class="grid-2-col">
             <div>
-                <p style="margin-bottom: 20px; line-height:1.8;">El 22 de junio de 2026, Kiara fue llevada de emergencia al veterinario en la Ciudad de México. Los estudios revelaron una masa en el bazo y líquido libre en el abdomen.</p>
-                <p style="margin-bottom: 20px; line-height:1.8;">Marco — su dueño — forma parte de una unidad que trabaja en regiones remotas de la sierra y no puede parar. No está en la ciudad. Kiara está aquí, pero su cuidado no puede esperar.</p>
-                <p style="margin-bottom: 20px; line-height:1.8;">El veterinario fue claro: esto será un proceso largo. La deuda irá creciendo conforme avancen los estudios, la cirugía y la recuperación. Todo lo que aparece aquí es real y verificable.</p>
+                <p id="text-history-p1" style="margin-bottom: 20px; line-height:1.8;">El 22 de junio de 2026, Kiara fue llevada de emergencia al veterinario en la Ciudad de México. Los estudios revelaron una masa en el bazo y líquido libre en el abdomen.</p>
+                <p id="text-history-p2" style="margin-bottom: 20px; line-height:1.8;">Marco — su dueño — forma parte de una unidad que trabaja en regiones remotas de la sierra y no puede parar. No está en la ciudad. Kiara está aquí, pero su cuidado no puede esperar.</p>
+                <p id="text-history-p3" style="margin-bottom: 20px; line-height:1.8;">El veterinario fue claro: esto será un proceso largo. La deuda irá creciendo conforme avancen los estudios, la cirugía y la recuperación. Todo lo que aparece aquí es real y verificable.</p>
             </div>
             <div>
                 <div class="stats-box">
@@ -125,9 +127,9 @@
 
     <div class="container" id="transparencia">
         <div class="section-header">
-            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">TRANSPARENCIA TOTAL</span>
-            <h2>Donaciones vs. Deuda actual</h2>
-            <p>Actualizado conforme llegan apoyos y nuevos gastos médicos. Sin adornos — solo números reales.</p>
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;" id="text-transparency-label">TRANSPARENCIA TOTAL</span>
+            <h2 id="text-transparency-title">Donaciones vs. Deuda actual</h2>
+            <p id="text-transparency-desc" style="max-width: 600px; margin: 0 auto; color: #666;">Actualizado conforme llegan apoyos y nuevos gastos médicos. Sin adornos — solo números reales.</p>
         </div>
         <div class="grid-2-col" style="margin-bottom: 20px;">
             <div class="stats-box" style="background: #eef8f2; border-color: #b0d4be;">
@@ -149,9 +151,9 @@
 
     <div class="container" style="padding-top: 40px;">
         <div class="section-header">
-            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">APOYO SIMBÓLICO</span>
-            <h2>Sabes exactamente a qué va tu apoyo</h2>
-            <p>No es una donación genérica. Elige lo que puedas — todo suma a la deuda real de Kiara.</p>
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;" id="text-donate-label">APOYO SIMBÓLICO</span>
+            <h2 id="text-donate-title">Sabes exactamente a qué va tu apoyo</h2>
+            <p id="text-donate-desc" style="max-width: 600px; margin: 0 auto; color: #666;">No es una donación genérica. Elige lo que puedas — todo suma a la deuda real de Kiara.</p>
         </div>
         <div class="cards-grid">
             <div class="donation-card"><div style="font-size: 2.5rem;">🍪</div><h3>Una Croqueta de Energía</h3><div class="price-tag">$10 MXN</div><p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Granito de arena para su alimentación y suero diario.</p><button class="btn-donate" onclick="abrirModal('🍪', 'Una Croqueta de Energía', '10')">Aportar →</button></div>
@@ -165,9 +167,9 @@
 
     <div class="container" id="bitacora">
         <div class="section-header">
-            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">BITÁCORA CON FOTOS</span>
-            <h2>Kiara, día a día</h2>
-            <p>Marco actualiza esta sección conforme hay noticias. Aquí puedes ver su evolución real.</p>
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;" id="text-gallery-label">BITÁCORA CON FOTOS</span>
+            <h2 id="text-gallery-title">Kiara, día a día</h2>
+            <p id="text-gallery-desc" style="max-width: 600px; margin: 0 auto; color: #666;">Marco actualiza esta sección conforme hay noticias. Aquí puedes ver su evolución real.</p>
         </div>
         <div class="gallery-grid" id="gallery-grid">
             <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto<br><span style="font-size:0.8rem;">Sube una desde el Admin</span></div></div>
@@ -199,31 +201,58 @@
     <div class="overlay" id="admin-overlay">
         <div class="modal-box">
             <div style="text-align: right; cursor: pointer;" onclick="cerrarAdmin()">✕</div>
-            <h3>🔐 Panel de Administración</h3>
+            <h3>🔐 Panel de Administración Maestro</h3>
             <div class="admin-panel" id="admin-panel-content">
-                <label>Actualizar Donado ($MXN)</label>
-                <input type="number" id="input-donado" value="0">
-                <label>Actualizar Deuda Total ($MXN)</label>
-                <input type="number" id="input-deuda" value="0">
-                
-                <label style="margin-top: 20px; border-top:1px solid #eee; padding-top:20px;">Actualizar Fotos de Kiara (Galería)</label>
-                <p style="font-size:0.9rem; color:#666; margin-bottom:12px;">Selecciona hasta 6 fotos (se guardarán localmente en tu navegador).</p>
-                <input type="file" id="admin-photo-upload" accept="image/*" multiple style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
-                
-                <label>Foto de Portada (Hero)</label>
-                <p style="font-size:0.9rem; color:#666; margin-bottom:12px;">Selecciona una foto para el fondo principal.</p>
-                <input type="file" id="hero-bg-upload" accept="image/*" style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
+                <p style="font-size:0.9rem; color:#666; border-bottom:2px solid #eee; padding-bottom:12px; margin-bottom:12px;">Aquí puedes cambiar ABSOLUTAMENTE TODO el contenido de la página.</p>
 
-                <label>Aviso Urgente (Texto)</label>
-                <textarea id="admin-aviso-texto" rows="3" placeholder="Ej: Kiara necesita una transfusión de sangre urgente hoy..."></textarea>
-                <label>Foto de Evidencia (Aviso)</label>
-                <input type="file" id="admin-aviso-img" accept="image/*" style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
+                <label>📝 Textos de la Portada</label>
+                <input type="text" id="t-hero-tag" placeholder="Etiqueta de la portada">
+                <input type="text" id="t-hero-title" placeholder="Título principal">
+                <textarea id="t-hero-desc" rows="2" placeholder="Subtítulo de la portada"></textarea>
+
+                <label>📝 Textos de la Historia</label>
+                <input type="text" id="t-history-label" placeholder="Etiqueta de la historia">
+                <input type="text" id="t-history-title" placeholder="Título de la historia">
+                <textarea id="t-history-p1" rows="2" placeholder="Párrafo 1"></textarea>
+                <textarea id="t-history-p2" rows="2" placeholder="Párrafo 2"></textarea>
+                <textarea id="t-history-p3" rows="2" placeholder="Párrafo 3"></textarea>
+
+                <label>📝 Textos de Transparencia</label>
+                <input type="text" id="t-transparency-label" placeholder="Etiqueta">
+                <input type="text" id="t-transparency-title" placeholder="Título">
+                <textarea id="t-transparency-desc" rows="2" placeholder="Descripción"></textarea>
+
+                <label>📝 Textos de Apoyo Simbólico</label>
+                <input type="text" id="t-donate-label" placeholder="Etiqueta">
+                <input type="text" id="t-donate-title" placeholder="Título">
+                <textarea id="t-donate-desc" rows="2" placeholder="Descripción"></textarea>
+
+                <label>📝 Textos de la Bitácora</label>
+                <input type="text" id="t-gallery-label" placeholder="Etiqueta">
+                <input type="text" id="t-gallery-title" placeholder="Título">
+                <textarea id="t-gallery-desc" rows="2" placeholder="Descripción"></textarea>
+
+                <label>💰 Montos (Donado vs Deuda)</label>
+                <div style="display:flex; gap:8px;">
+                    <input type="number" id="input-donado" placeholder="Donado" style="flex:1;">
+                    <input type="number" id="input-deuda" placeholder="Deuda" style="flex:1;">
+                </div>
+                
+                <label>🖼️ Fotos de Galería (Sube hasta 6)</label>
+                <input type="file" id="admin-photo-upload" accept="image/*" multiple style="padding:6px;">
+                
+                <label>🌅 Foto de Portada (Hero)</label>
+                <input type="file" id="hero-bg-upload" accept="image/*" style="padding:6px;">
+
+                <label>🚨 Aviso Urgente</label>
+                <textarea id="admin-aviso-texto" rows="2" placeholder="Escribe el aviso urgente..."></textarea>
+                <input type="file" id="admin-aviso-img" accept="image/*" style="padding:6px;">
 
                 <div class="btn-row">
                     <button class="btn-danger" onclick="eliminarPortada()">🗑️ Eliminar Portada</button>
                     <button class="btn-danger" onclick="eliminarGaleria()">🗑️ Eliminar Fotos Galería</button>
                 </div>
-                <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar Cambios</button>
+                <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar y Aplicar Cambios</button>
             </div>
         </div>
     </div>
@@ -257,6 +286,25 @@
     function activarAdmin() {
         let pass = prompt("Ingrese contraseña de administrador:");
         if (pass === "111530") {
+            // Cargar textos en los inputs del admin
+            document.getElementById('t-hero-tag').value = document.getElementById('text-hero-tag').textContent;
+            document.getElementById('t-hero-title').value = document.getElementById('text-hero-title').innerHTML;
+            document.getElementById('t-hero-desc').value = document.getElementById('text-hero-desc').textContent;
+            document.getElementById('t-history-label').value = document.getElementById('text-history-label').textContent;
+            document.getElementById('t-history-title').value = document.getElementById('text-history-title').textContent;
+            document.getElementById('t-history-p1').value = document.getElementById('text-history-p1').textContent;
+            document.getElementById('t-history-p2').value = document.getElementById('text-history-p2').textContent;
+            document.getElementById('t-history-p3').value = document.getElementById('text-history-p3').textContent;
+            document.getElementById('t-transparency-label').value = document.getElementById('text-transparency-label').textContent;
+            document.getElementById('t-transparency-title').value = document.getElementById('text-transparency-title').textContent;
+            document.getElementById('t-transparency-desc').value = document.getElementById('text-transparency-desc').textContent;
+            document.getElementById('t-donate-label').value = document.getElementById('text-donate-label').textContent;
+            document.getElementById('t-donate-title').value = document.getElementById('text-donate-title').textContent;
+            document.getElementById('t-donate-desc').value = document.getElementById('text-donate-desc').textContent;
+            document.getElementById('t-gallery-label').value = document.getElementById('text-gallery-label').textContent;
+            document.getElementById('t-gallery-title').value = document.getElementById('text-gallery-title').textContent;
+            document.getElementById('t-gallery-desc').value = document.getElementById('text-gallery-desc').textContent;
+            
             document.getElementById('input-donado').value = DONADO;
             document.getElementById('input-deuda').value = DEUDA;
             document.getElementById('admin-overlay').classList.add('open');
@@ -302,14 +350,44 @@
     }
 
     function guardarCambiosAdmin() {
-        // Guardar números
+        // 1. Guardar Textos en DOM y localStorage
+        const texts = {
+            'text-hero-tag': 't-hero-tag',
+            'text-hero-title': 't-hero-title',
+            'text-hero-desc': 't-hero-desc',
+            'text-history-label': 't-history-label',
+            'text-history-title': 't-history-title',
+            'text-history-p1': 't-history-p1',
+            'text-history-p2': 't-history-p2',
+            'text-history-p3': 't-history-p3',
+            'text-transparency-label': 't-transparency-label',
+            'text-transparency-title': 't-transparency-title',
+            'text-transparency-desc': 't-transparency-desc',
+            'text-donate-label': 't-donate-label',
+            'text-donate-title': 't-donate-title',
+            'text-donate-desc': 't-donate-desc',
+            'text-gallery-label': 't-gallery-label',
+            'text-gallery-title': 't-gallery-title',
+            'text-gallery-desc': 't-gallery-desc'
+        };
+        for (const [domId, inputId] of Object.entries(texts)) {
+            const val = document.getElementById(inputId).value;
+            const el = document.getElementById(domId);
+            if (el) {
+                if (domId === 'text-hero-title') el.innerHTML = val; // Permite <span> si existe
+                else el.textContent = val;
+                localStorage.setItem('kiara_text_' + domId, val);
+            }
+        }
+
+        // 2. Guardar Números
         DONADO = document.getElementById('input-donado').value;
         DEUDA = document.getElementById('input-deuda').value;
         localStorage.setItem('kiara_donado', DONADO);
         localStorage.setItem('kiara_deuda', DEUDA);
         actualizarInterfaz();
 
-        // Guardar fotos Galería
+        // 3. Guardar Fotos Galería
         const galleryFiles = document.getElementById('admin-photo-upload').files;
         if (galleryFiles.length > 0) {
             const gallery = document.getElementById('gallery-grid');
@@ -329,7 +407,7 @@
             }
         }
 
-        // Guardar foto de portada
+        // 4. Guardar Foto de Portada
         const heroFile = document.getElementById('hero-bg-upload').files[0];
         if (heroFile) {
             const reader = new FileReader();
@@ -340,7 +418,7 @@
             reader.readAsDataURL(heroFile);
         }
 
-        // Guardar Aviso Urgente
+        // 5. Guardar Aviso Urgente
         const avisoTexto = document.getElementById('admin-aviso-texto').value;
         localStorage.setItem('kiara_aviso_texto', avisoTexto);
         const avisoFile = document.getElementById('admin-aviso-img').files[0];
@@ -355,12 +433,29 @@
             mostrarAviso();
         }
 
-        alert("✅ Cambios guardados exitosamente en tu navegador.");
+        alert("✅ Textos, números y fotos guardados exitosamente.");
         cerrarAdmin();
         location.reload();
     }
 
     window.onload = function() {
+        // Cargar Textos guardados
+        const textIds = [
+            'text-hero-tag', 'text-hero-title', 'text-hero-desc',
+            'text-history-label', 'text-history-title', 'text-history-p1', 'text-history-p2', 'text-history-p3',
+            'text-transparency-label', 'text-transparency-title', 'text-transparency-desc',
+            'text-donate-label', 'text-donate-title', 'text-donate-desc',
+            'text-gallery-label', 'text-gallery-title', 'text-gallery-desc'
+        ];
+        textIds.forEach(id => {
+            const val = localStorage.getItem('kiara_text_' + id);
+            const el = document.getElementById(id);
+            if (val && el) {
+                if (id === 'text-hero-title') el.innerHTML = val;
+                else el.textContent = val;
+            }
+        });
+
         actualizarInterfaz();
         mostrarAviso();
 
@@ -370,11 +465,9 @@
 
         // Cargar galería
         const gallery = document.getElementById('gallery-grid');
-        let loaded = false;
         for(let i=0; i<6; i++) {
             const imgData = localStorage.getItem(`kiara_img_${i}`);
             if(imgData) {
-                loaded = true;
                 const divs = document.querySelectorAll('.gallery-item');
                 if(divs[i]) divs[i].innerHTML = `<img src="${imgData}" class="gallery-img" alt="Kiara">`;
             }
