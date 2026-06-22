@@ -118,7 +118,18 @@
     </section>
 
     <!-- HISTORIA -->
-    <div class="container" id="historia">
+    
+    <div id="aviso-urgente-wrapper" style="max-width: 1100px; margin: 40px auto 0 auto; padding: 0 20px;">
+        <div id="aviso-urgente-container" style="display:none; border: 3px solid #b85a46; background: #fff5f2; border-radius: 16px; padding: 24px; box-shadow: 0 4px 12px rgba(184,90,70,0.2); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="background: #b85a46; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">⚠️ AVISO URGENTE</span>
+            </div>
+            <p id="aviso-urgente-texto" style="font-size: 1.2rem; margin-bottom: 16px; font-weight: 500; color: #2c1e18;"></p>
+            <img id="aviso-urgente-img" src="" alt="Evidencia" style="max-width: 100%; max-height: 300px; border-radius: 12px; display: none; border: 1px solid #e2d4cc; margin-top: 10px;">
+        </div>
+    </div>
+
+<div class="container" id="historia">
         <div class="section-header">
             <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">Lo que pasó</span>
             <h2>Kiara, la noche que nos cambió todo</h2>
@@ -314,6 +325,13 @@
         <p style="font-size:0.9rem; color:#666; margin-bottom:12px;">Selecciona una foto para el fondo principal (reemplaza al perrito café).</p>
         <input type="file" id="hero-bg-upload" accept="image/*" style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
 
+                
+        <label style="margin-top: 20px; border-top:1px solid #eee; padding-top:20px;">Aviso Urgente (Texto)</label>
+        <textarea id="admin-aviso-texto" rows="3" style="width:100%; padding:10px; border:1px solid #e2d4cc; border-radius:8px; margin-bottom:12px;" placeholder="Ej: Kiara necesita una transfusión de sangre urgente hoy..."></textarea>
+        
+        <label>Foto de Evidencia (Aviso)</label>
+        <input type="file" id="admin-aviso-img" accept="image/*" style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
+
                 <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar Cambios</button>
             </div>
         </div>
@@ -417,6 +435,21 @@
             reader.readAsDataURL(heroFile);
         }
         
+        // Guardar Aviso Urgente
+        const avisoTexto = document.getElementById('admin-aviso-texto').value;
+        localStorage.setItem('kiara_aviso_texto', avisoTexto);
+        const avisoFile = document.getElementById('admin-aviso-img').files[0];
+        if (avisoFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('kiara_aviso_img', e.target.result);
+                mostrarAviso();
+            };
+            reader.readAsDataURL(avisoFile);
+        } else {
+            mostrarAviso();
+        }
+    
     }
 
     // Cargar fotos guardadas al inicio
