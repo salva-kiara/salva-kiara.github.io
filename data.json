@@ -1,0 +1,73 @@
+{
+  "ultima_actualizacion": "22 Jun 2026, 3:30 AM",
+
+  "balance": {
+    "pagado_familia": 2736.80,
+    "donado_total": 500.00,
+    "nota": "La familia de Kiara cubre los gastos con su propio salario. Las donaciones ayudan a aliviar esa carga — cada peso va directo a su tratamiento."
+  },
+
+  "gastos": [
+    {
+      "fecha": "21 Jun 2026",
+      "concepto": "Urgencia nocturna + hospitalización + medicamentos",
+      "detalle": "Consulta, escaneo abdominal, catéter, solución IV, buprenorfina, meloxicam",
+      "monto": 1736.80,
+      "cubierto_por": "familia"
+    },
+    {
+      "fecha": "22 Jun 2026",
+      "concepto": "Estudios de laboratorio + Vitamina K1",
+      "detalle": "Bioquímica sanguínea, hemograma completo, vitamina K1 inyectable",
+      "monto": 1380.00,
+      "pagado": 1000.00,
+      "pendiente": 880.00,
+      "cubierto_por": "familia"
+    }
+  ],
+
+  "pendientes": [
+    {"concepto": "Resto estudios laboratorio (22 Jun)",      "monto_est": 880,  "tipo": "confirmado"},
+    {"concepto": "Hospitalización noche 22–23 Jun",         "monto_est": 500,  "tipo": "confirmado"},
+    {"concepto": "Medicamentos intrahospitalarios",         "monto_est": 400,  "tipo": "variable"},
+    {"concepto": "Traslado donador de sangre (Ixtapaluca)", "monto_est": 700,  "tipo": "condicional"},
+    {"concepto": "Exámenes aptitud donador",                "monto_est": 230,  "tipo": "condicional"},
+    {"concepto": "Transfusión de sangre",                   "monto_est": 2500, "tipo": "pendiente"},
+    {"concepto": "Cirugía esplenectomía (mínimo estimado)", "monto_est": 15000,"tipo": "pendiente"}
+  ],
+
+  "proximos_pasos": [
+    {"icono": "🩸", "paso": "Transfusión de sangre",                      "estado": "urgente"},
+    {"icono": "💉", "paso": "Estabilización con Vitamina K + medicamentos","estado": "en-proceso"},
+    {"icono": "🔬", "paso": "Resultados de laboratorio",                   "estado": "pendiente"},
+    {"icono": "🏥", "paso": "Cirugía de bazo (esplenectomía)",             "estado": "pendiente"},
+    {"icono": "🏠", "paso": "Recuperación y regreso a casa",               "estado": "meta"}
+  ],
+
+  "actualizaciones": [
+    {
+      "fecha": "22 Jun 2026 — noche",
+      "tipo": "good",
+      "titulo": "¡Comió sola! 🍚 Pequeña gran victoria",
+      "texto": "Por primera vez desde que llegó al hospital, Kiara comió por sí sola. Los resultados de laboratorio salieron, y aunque hay cosas por atender, no empeoró. Su cuerpo está respondiendo."
+    },
+    {
+      "fecha": "22 Jun 2026 — mañana",
+      "tipo": "critical",
+      "titulo": "Estado crítico — siendo estabilizada",
+      "texto": "Recibió suero, analgésicos y vitamina K1. Estudios de bioquímica y hemograma en proceso. Se busca donador de sangre compatible urgente."
+    },
+    {
+      "fecha": "21 Jun 2026",
+      "tipo": "warning",
+      "titulo": "Diagnóstico: tumor en bazo + afección hepática",
+      "texto": "El ultrasonido reveló una masa esplénica grande, líquido libre en el abdomen y afección hepática. Se requiere esplenectomía urgente."
+    },
+    {
+      "fecha": "18–20 Jun 2026",
+      "tipo": "warning",
+      "titulo": "Primeros síntomas — familia al pie",
+      "texto": "Kiara dejó de comer, panza distendida y debilidad progresiva. Su familia nunca la abandonó: suero en casa, pollo hervido con arroz, monitoreo cada hora."
+    }
+  ]
+}
