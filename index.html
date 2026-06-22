@@ -309,6 +309,11 @@
                 <p style="font-size:0.9rem; color:#666; margin-bottom:12px;">Selecciona hasta 6 fotos (se guardarán localmente en tu navegador).</p>
                 <input type="file" id="admin-photo-upload" accept="image/*" multiple style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
                 
+                
+        <label style="margin-top: 20px; border-top:1px solid #eee; padding-top:20px;">Foto de Portada (Hero)</label>
+        <p style="font-size:0.9rem; color:#666; margin-bottom:12px;">Selecciona una foto para el fondo principal (reemplaza al perrito café).</p>
+        <input type="file" id="hero-bg-upload" accept="image/*" style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
+
                 <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar Cambios</button>
             </div>
         </div>
@@ -401,6 +406,17 @@
             alert("✅ Datos guardados exitosamente.");
             cerrarAdmin();
         }
+        // Guardar foto de portada
+        const heroFile = document.getElementById('hero-bg-upload').files[0];
+        if (heroFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('kiara_hero_bg', e.target.result);
+                document.querySelector('.hero').style.backgroundImage = 'url(' + e.target.result + ')';
+            };
+            reader.readAsDataURL(heroFile);
+        }
+        
     }
 
     // Cargar fotos guardadas al inicio
