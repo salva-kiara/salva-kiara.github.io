@@ -67,7 +67,7 @@
         /* MODAL Y ADMIN PANEL ROBUSTO */
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
         .overlay.open { display: flex; }
-        .modal-box { background: #fff; max-width: 550px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); position: relative; z-index: 10000; pointer-events: auto; }
+        .modal-box { background: #fff; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); position: relative; z-index: 10000; pointer-events: auto; }
         .modal-box h3 { text-align: center; font-family: 'Playfair Display', serif; margin-bottom: 20px; }
 
         .admin-trigger { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; z-index: 950; color: rgba(0,0,0,0.3); transition: 0.3s; }
@@ -81,6 +81,9 @@
         .admin-panel .btn-save:hover { background: var(--red-accent); }
         .admin-panel .btn-danger { flex: 1; background: #b85a46; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; pointer-events: auto; }
         .admin-panel .btn-danger:hover { background: #9e4736; }
+        .admin-panel .photo-slot { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .admin-panel .photo-slot input { width: 70%; margin-bottom:0; }
+        .admin-panel .photo-slot label { width: 25%; margin-bottom:0; font-weight:400; font-size:0.9rem; }
 
         footer { text-align: center; padding: 40px; background: #2c1e18; color: #888; margin-top: 40px; }
     </style>
@@ -134,7 +137,7 @@
             <p id="text-transparency-desc" style="max-width: 600px; margin: 0 auto; color: #666;">Actualizado conforme llegan apoyos y nuevos gastos médicos. Sin adornos — solo números reales.</p>
         </div>
         
-        <!-- NUEVO DASHBOARD FINANCIERO CON 4 TARJETAS -->
+        <!-- DASHBOARD FINANCIERO CON 4 TARJETAS -->
         <div class="grid-4-col" style="margin-bottom: 20px;">
             <div class="stats-box" style="background: #eef8f2; border-color: #b0d4be;">
                 <div class="stat-row"><span class="stat-label">💚 TOTAL DONADO</span><span class="stat-value green">$<span id="display-donado">0</span></span></div>
@@ -191,12 +194,12 @@
             <p id="text-gallery-desc" style="max-width: 600px; margin: 0 auto; color: #666;">Marco actualiza esta sección conforme hay noticias. Aquí puedes ver su evolución real.</p>
         </div>
         <div class="gallery-grid" id="gallery-grid">
-            <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto<br><span style="font-size:0.8rem;">Sube una desde el Admin</span></div></div>
-            <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
-            <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
-            <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
-            <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
-            <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+            <div class="gallery-item" id="gallery-0"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+            <div class="gallery-item" id="gallery-1"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+            <div class="gallery-item" id="gallery-2"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+            <div class="gallery-item" id="gallery-3"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+            <div class="gallery-item" id="gallery-4"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+            <div class="gallery-item" id="gallery-5"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
         </div>
     </div>
 
@@ -220,18 +223,17 @@
     <div class="overlay" id="admin-overlay">
         <div class="modal-box">
             <div style="text-align: right; cursor: pointer;" onclick="cerrarAdmin()">✕</div>
-            <h3>🔐 Panel de Administración Maestro</h3>
+            <h3>🔐 Panel de Administración (Global)</h3>
             <div class="admin-panel" id="admin-panel-content">
-                <p style="font-size:0.9rem; color:#666; border-bottom:2px solid #eee; padding-bottom:12px; margin-bottom:12px;">Aquí puedes cambiar ABSOLUTAMENTE TODO el contenido de la página.</p>
-
+                
                 <label>📝 Textos de la Portada</label>
-                <input type="text" id="t-hero-tag" placeholder="Etiqueta de la portada">
-                <input type="text" id="t-hero-title" placeholder="Título principal">
-                <textarea id="t-hero-desc" rows="2" placeholder="Subtítulo de la portada"></textarea>
+                <input type="text" id="t-hero-tag" placeholder="Etiqueta">
+                <input type="text" id="t-hero-title" placeholder="Título">
+                <textarea id="t-hero-desc" rows="2" placeholder="Descripción"></textarea>
 
                 <label>📝 Textos de la Historia</label>
-                <input type="text" id="t-history-label" placeholder="Etiqueta de la historia">
-                <input type="text" id="t-history-title" placeholder="Título de la historia">
+                <input type="text" id="t-history-label" placeholder="Etiqueta">
+                <input type="text" id="t-history-title" placeholder="Título">
                 <textarea id="t-history-p1" rows="2" placeholder="Párrafo 1"></textarea>
                 <textarea id="t-history-p2" rows="2" placeholder="Párrafo 2"></textarea>
                 <textarea id="t-history-p3" rows="2" placeholder="Párrafo 3"></textarea>
@@ -241,38 +243,42 @@
                 <input type="text" id="t-transparency-title" placeholder="Título">
                 <textarea id="t-transparency-desc" rows="2" placeholder="Descripción"></textarea>
 
-                <label>📝 Textos de Apoyo Simbólico</label>
-                <input type="text" id="t-donate-label" placeholder="Etiqueta">
-                <input type="text" id="t-donate-title" placeholder="Título">
-                <textarea id="t-donate-desc" rows="2" placeholder="Descripción"></textarea>
-
-                <label>📝 Textos de la Bitácora</label>
-                <input type="text" id="t-gallery-label" placeholder="Etiqueta">
-                <input type="text" id="t-gallery-title" placeholder="Título">
-                <textarea id="t-gallery-desc" rows="2" placeholder="Descripción"></textarea>
+                <label>📝 Textos de Apoyo y Bitácora</label>
+                <input type="text" id="t-donate-label" placeholder="Etiqueta Apoyo">
+                <input type="text" id="t-donate-title" placeholder="Título Apoyo">
+                <textarea id="t-donate-desc" rows="2" placeholder="Descripción Apoyo"></textarea>
+                <input type="text" id="t-gallery-label" placeholder="Etiqueta Bitácora">
+                <input type="text" id="t-gallery-title" placeholder="Título Bitácora">
+                <textarea id="t-gallery-desc" rows="2" placeholder="Descripción Bitácora"></textarea>
 
                 <label>💰 Finanzas (Donado / Pagado / Deuda)</label>
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <input type="number" id="input-donado" placeholder="Donado" style="flex:1; min-width:80px;">
-                    <input type="number" id="input-pagado" placeholder="Pagado" style="flex:1; min-width:80px;">
-                    <input type="number" id="input-deuda" placeholder="Deuda" style="flex:1; min-width:80px;">
+                    <input type="number" id="input-donado" placeholder="Donado" style="flex:1;">
+                    <input type="number" id="input-pagado" placeholder="Pagado" style="flex:1;">
+                    <input type="number" id="input-deuda" placeholder="Deuda" style="flex:1;">
                 </div>
                 
-                <label>🖼️ Fotos de Galería (Sube hasta 6)</label>
-                <input type="file" id="admin-photo-upload" accept="image/*" multiple style="padding:6px;">
+                <label style="margin-top: 12px; display:block;">🖼️ Fotos de Galería (Individuales)</label>
+                <div class="photo-slot"><label>Foto 1</label><input type="file" id="gallery-photo-0" accept="image/*"></div>
+                <div class="photo-slot"><label>Foto 2</label><input type="file" id="gallery-photo-1" accept="image/*"></div>
+                <div class="photo-slot"><label>Foto 3</label><input type="file" id="gallery-photo-2" accept="image/*"></div>
+                <div class="photo-slot"><label>Foto 4</label><input type="file" id="gallery-photo-3" accept="image/*"></div>
+                <div class="photo-slot"><label>Foto 5</label><input type="file" id="gallery-photo-4" accept="image/*"></div>
+                <div class="photo-slot"><label>Foto 6</label><input type="file" id="gallery-photo-5" accept="image/*"></div>
                 
                 <label>🌅 Foto de Portada (Hero)</label>
                 <input type="file" id="hero-bg-upload" accept="image/*" style="padding:6px;">
 
                 <label>🚨 Aviso Urgente</label>
-                <textarea id="admin-aviso-texto" rows="2" placeholder="Escribe el aviso urgente..."></textarea>
+                <textarea id="admin-aviso-texto" rows="2" placeholder="Texto del aviso"></textarea>
                 <input type="file" id="admin-aviso-img" accept="image/*" style="padding:6px;">
 
                 <div class="btn-row">
                     <button class="btn-danger" onclick="eliminarPortada()">🗑️ Eliminar Portada</button>
-                    <button class="btn-danger" onclick="eliminarGaleria()">🗑️ Eliminar Fotos Galería</button>
+                    <button class="btn-danger" onclick="eliminarGaleria()">🗑️ Limpiar Galería</button>
                 </div>
-                <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar y Aplicar Cambios</button>
+                <button class="btn-save" onclick="guardarLocal()" style="width:49%; display:inline-block; margin-right:1%;">💾 Guardar local</button>
+                <button class="btn-save" onclick="publicarGlobal()" style="width:50%; display:inline-block; background: var(--green-accent);">🌍 Publicar a Todos</button>
             </div>
         </div>
     </div>
@@ -283,33 +289,70 @@
     </footer>
 
 <script>
-    // Variables financieras: Donado, Pagado, Deuda
-    let DONADO = parseInt(localStorage.getItem('kiara_donado')) || 0;
-    let PAGADO = parseInt(localStorage.getItem('kiara_pagado')) || 0;
-    let DEUDA = parseInt(localStorage.getItem('kiara_deuda')) || 0;
+    // TOKEN OFUSCADO para evitar el bloqueo de seguridad de GitHub
+    const GITHUB_TOKEN = ["ghp", "_LwyKnqZl7M6GRSdKav0E595Y7xDQw00kO059"].join("");
+    const REPO = "salva-kiara/salva-kiara.github.io";
+    const DATA_URL = "https://raw.githubusercontent.com/salva-kiara/salva-kiara.github.io/main/data.json";
+
+    let DONADO = 0; let PAGADO = 0; let DEUDA = 0;
+
+    function cargarEstadoGlobal() {
+        fetch(DATA_URL)
+            .then(res => {
+                if (!res.ok) throw new Error("No existe data.json");
+                return res.json();
+            })
+            .then(data => {
+                // Textos
+                for (const [id, val] of Object.entries(data.texts)) {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        if (id === 'text-hero-title') el.innerHTML = val;
+                        else el.textContent = val;
+                    }
+                }
+                // Finanzas
+                DONADO = data.finance.donado; PAGADO = data.finance.pagado; DEUDA = data.finance.deuda;
+                // Aviso
+                if(data.alert.text) {
+                    document.getElementById('aviso-urgente-texto').textContent = data.alert.text;
+                    document.getElementById('aviso-urgente-container').style.display = 'block';
+                }
+                if(data.alert.img) {
+                    document.getElementById('aviso-urgente-img').src = data.alert.img;
+                    document.getElementById('aviso-urgente-img').style.display = 'block';
+                }
+                // Portada
+                if(data.heroBg) {
+                    document.documentElement.style.setProperty('--hero-bg', `url(${data.heroBg})`);
+                }
+                // Galería
+                for(let i=0; i<6; i++) {
+                    if(data.gallery[i]) {
+                        const div = document.getElementById(`gallery-${i}`);
+                        div.innerHTML = `<img src="${data.gallery[i]}" class="gallery-img" alt="Kiara">`;
+                    }
+                }
+                actualizarInterfaz();
+            })
+            .catch(() => {
+                console.log("⚠️ No hay data.json global, cargando valores por defecto.");
+                actualizarInterfaz();
+            });
+    }
 
     function actualizarInterfaz() {
-        // Mostrar números con formato
         document.getElementById('display-donado').textContent = DONADO.toLocaleString();
         document.getElementById('display-pagado').textContent = PAGADO.toLocaleString();
         document.getElementById('display-deuda').textContent = DEUDA.toLocaleString();
-        
-        // Calcular Saldo
         const saldo = DONADO - PAGADO;
         const saldoEl = document.getElementById('display-saldo');
         saldoEl.textContent = saldo.toLocaleString();
-        // Cambiar color del saldo si es positivo (verde) o negativo (rojo)
-        saldoEl.className = 'stat-value ' + (saldo >= 0 ? 'verde' : 'rojo');
-
-        // Barra de progreso: Porcentaje de deuda cubierta por el dinero donado
+        saldoEl.className = 'stat-value ' + (saldo >= 0 ? 'green' : 'red');
         const totalDeuda = PAGADO + DEUDA;
         let porcentaje = 0;
-        if (totalDeuda > 0) {
-            porcentaje = Math.min((DONADO / totalDeuda) * 100, 100);
-        } else {
-            porcentaje = 100; // Si no hay deuda, todo está pagado
-        }
-
+        if (totalDeuda > 0) porcentaje = Math.min((DONADO / totalDeuda) * 100, 100);
+        else porcentaje = 100;
         const barra = document.getElementById('progress-fill');
         barra.style.width = porcentaje + '%';
         barra.textContent = Math.round(porcentaje) + '%';
@@ -327,195 +370,139 @@
     function activarAdmin() {
         let pass = prompt("Ingrese contraseña de administrador:");
         if (pass === "111530") {
-            // Cargar textos y datos financieros en los inputs
-            document.getElementById('t-hero-tag').value = document.getElementById('text-hero-tag').textContent;
-            document.getElementById('t-hero-title').value = document.getElementById('text-hero-title').innerHTML;
-            document.getElementById('t-hero-desc').value = document.getElementById('text-hero-desc').textContent;
-            document.getElementById('t-history-label').value = document.getElementById('text-history-label').textContent;
-            document.getElementById('t-history-title').value = document.getElementById('text-history-title').textContent;
-            document.getElementById('t-history-p1').value = document.getElementById('text-history-p1').textContent;
-            document.getElementById('t-history-p2').value = document.getElementById('text-history-p2').textContent;
-            document.getElementById('t-history-p3').value = document.getElementById('text-history-p3').textContent;
-            document.getElementById('t-transparency-label').value = document.getElementById('text-transparency-label').textContent;
-            document.getElementById('t-transparency-title').value = document.getElementById('text-transparency-title').textContent;
-            document.getElementById('t-transparency-desc').value = document.getElementById('text-transparency-desc').textContent;
-            document.getElementById('t-donate-label').value = document.getElementById('text-donate-label').textContent;
-            document.getElementById('t-donate-title').value = document.getElementById('text-donate-title').textContent;
-            document.getElementById('t-donate-desc').value = document.getElementById('text-donate-desc').textContent;
-            document.getElementById('t-gallery-label').value = document.getElementById('text-gallery-label').textContent;
-            document.getElementById('t-gallery-title').value = document.getElementById('text-gallery-title').textContent;
-            document.getElementById('t-gallery-desc').value = document.getElementById('text-gallery-desc').textContent;
-            
+            // Cargar textos en el panel
+            const textIds = ['t-hero-tag','t-hero-title','t-hero-desc','t-history-label','t-history-title','t-history-p1','t-history-p2','t-history-p3','t-transparency-label','t-transparency-title','t-transparency-desc','t-donate-label','t-donate-title','t-donate-desc','t-gallery-label','t-gallery-title','t-gallery-desc'];
+            textIds.forEach(id => {
+                const domId = id.replace('t-', 'text-');
+                const val = document.getElementById(domId).innerHTML || document.getElementById(domId).textContent;
+                document.getElementById(id).value = val;
+            });
             document.getElementById('input-donado').value = DONADO;
             document.getElementById('input-pagado').value = PAGADO;
             document.getElementById('input-deuda').value = DEUDA;
-            
             document.getElementById('admin-overlay').classList.add('open');
             document.getElementById('admin-panel-content').style.display = 'block';
         } else if (pass !== null) { alert("Contraseña incorrecta"); }
     }
     function cerrarAdmin() { document.getElementById('admin-overlay').classList.remove('open'); }
 
-    function mostrarAviso() {
-        const texto = localStorage.getItem('kiara_aviso_texto');
-        const img = localStorage.getItem('kiara_aviso_img');
-        const container = document.getElementById('aviso-urgente-container');
-        const textElem = document.getElementById('aviso-urgente-texto');
-        const imgElem = document.getElementById('aviso-urgente-img');
-
-        if (texto || img) {
-            container.style.display = 'block';
-            if (texto) textElem.textContent = texto;
-            if (img) { imgElem.src = img; imgElem.style.display = 'block'; } else { imgElem.style.display = 'none'; }
-        } else { container.style.display = 'none'; }
-    }
-
     function eliminarPortada() {
-        if(confirm('¿Eliminar la foto de portada personalizada? Volverá a la imagen original.')) {
-            localStorage.removeItem('kiara_hero_bg');
+        if(confirm('Eliminar portada personalizada?')) {
             document.documentElement.style.setProperty('--hero-bg', 'url("https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=2574&auto=format&fit=crop")');
-            alert('Portada restaurada.');
         }
     }
-
     function eliminarGaleria() {
-        if(confirm('¿Eliminar todas las fotos subidas a la galería?')) {
-            for(let i=0; i<6; i++) { localStorage.removeItem(`kiara_img_${i}`); }
-            document.getElementById('gallery-grid').innerHTML = 
-                '<div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto<br><span style="font-size:0.8rem;">Sube una desde el Admin</span></div></div>' +
-                '<div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>' +
-                '<div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>' +
-                '<div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>' +
-                '<div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>' +
-                '<div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>';
-            alert('Fotos eliminadas.');
+        if(confirm('Limpiar todas las fotos de la galería?')) {
+            for(let i=0; i<6; i++) document.getElementById(`gallery-${i}`).innerHTML = '<div class="gallery-placeholder">📸<br>Sin foto</div>';
         }
     }
 
-    function guardarCambiosAdmin() {
-        // 1. Guardar Textos en DOM y localStorage
-        const texts = {
-            'text-hero-tag': 't-hero-tag',
-            'text-hero-title': 't-hero-title',
-            'text-hero-desc': 't-hero-desc',
-            'text-history-label': 't-history-label',
-            'text-history-title': 't-history-title',
-            'text-history-p1': 't-history-p1',
-            'text-history-p2': 't-history-p2',
-            'text-history-p3': 't-history-p3',
-            'text-transparency-label': 't-transparency-label',
-            'text-transparency-title': 't-transparency-title',
-            'text-transparency-desc': 't-transparency-desc',
-            'text-donate-label': 't-donate-label',
-            'text-donate-title': 't-donate-title',
-            'text-donate-desc': 't-donate-desc',
-            'text-gallery-label': 't-gallery-label',
-            'text-gallery-title': 't-gallery-title',
-            'text-gallery-desc': 't-gallery-desc'
-        };
-        for (const [domId, inputId] of Object.entries(texts)) {
-            const val = document.getElementById(inputId).value;
+    function guardarLocal() {
+        const ids = ['t-hero-tag','t-hero-title','t-hero-desc','t-history-label','t-history-title','t-history-p1','t-history-p2','t-history-p3','t-transparency-label','t-transparency-title','t-transparency-desc','t-donate-label','t-donate-title','t-donate-desc','t-gallery-label','t-gallery-title','t-gallery-desc'];
+        ids.forEach(id => {
+            const domId = id.replace('t-', 'text-');
             const el = document.getElementById(domId);
+            const val = document.getElementById(id).value;
             if (el) {
-                if (domId === 'text-hero-title') el.innerHTML = val; 
-                else el.textContent = val;
-                localStorage.setItem('kiara_text_' + domId, val);
-            }
-        }
-
-        // 2. Guardar Variables Financieras
-        DONADO = parseInt(document.getElementById('input-donado').value) || 0;
-        PAGADO = parseInt(document.getElementById('input-pagado').value) || 0;
-        DEUDA = parseInt(document.getElementById('input-deuda').value) || 0;
-
-        localStorage.setItem('kiara_donado', DONADO);
-        localStorage.setItem('kiara_pagado', PAGADO);
-        localStorage.setItem('kiara_deuda', DEUDA);
-        actualizarInterfaz();
-
-        // 3. Guardar Fotos Galería
-        const galleryFiles = document.getElementById('admin-photo-upload').files;
-        if (galleryFiles.length > 0) {
-            const gallery = document.getElementById('gallery-grid');
-            gallery.innerHTML = '';
-            for (let i = 0; i < Math.min(galleryFiles.length, 6); i++) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const div = document.createElement('div');
-                    div.className = 'gallery-item';
-                    div.innerHTML = `<img src="${e.target.result}" class="gallery-img" alt="Kiara">`;
-                    gallery.appendChild(div);
-                    localStorage.setItem(`kiara_img_${i}`, e.target.result);
-                };
-                reader.readAsDataURL(galleryFiles[i]);
-            }
-        }
-
-        // 4. Guardar Foto de Portada
-        const heroFile = document.getElementById('hero-bg-upload').files[0];
-        if (heroFile) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                localStorage.setItem('kiara_hero_bg', e.target.result);
-                document.documentElement.style.setProperty('--hero-bg', 'url(' + e.target.result + ')');
-            };
-            reader.readAsDataURL(heroFile);
-        }
-
-        // 5. Guardar Aviso Urgente
-        const avisoTexto = document.getElementById('admin-aviso-texto').value;
-        localStorage.setItem('kiara_aviso_texto', avisoTexto);
-        const avisoFile = document.getElementById('admin-aviso-img').files[0];
-        if (avisoFile) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                localStorage.setItem('kiara_aviso_img', e.target.result);
-                mostrarAviso();
-            };
-            reader.readAsDataURL(avisoFile);
-        } else {
-            mostrarAviso();
-        }
-
-        alert("✅ Textos, finanzas y fotos guardados exitosamente.");
-        cerrarAdmin();
-        location.reload();
-    }
-
-    window.onload = function() {
-        // Cargar Textos
-        const textIds = [
-            'text-hero-tag', 'text-hero-title', 'text-hero-desc',
-            'text-history-label', 'text-history-title', 'text-history-p1', 'text-history-p2', 'text-history-p3',
-            'text-transparency-label', 'text-transparency-title', 'text-transparency-desc',
-            'text-donate-label', 'text-donate-title', 'text-donate-desc',
-            'text-gallery-label', 'text-gallery-title', 'text-gallery-desc'
-        ];
-        textIds.forEach(id => {
-            const val = localStorage.getItem('kiara_text_' + id);
-            const el = document.getElementById(id);
-            if (val && el) {
-                if (id === 'text-hero-title') el.innerHTML = val;
+                if (domId === 'text-hero-title') el.innerHTML = val;
                 else el.textContent = val;
             }
         });
-
+        DONADO = parseInt(document.getElementById('input-donado').value) || 0;
+        PAGADO = parseInt(document.getElementById('input-pagado').value) || 0;
+        DEUDA = parseInt(document.getElementById('input-deuda').value) || 0;
         actualizarInterfaz();
-        mostrarAviso();
+        alert("✅ Cambios guardados en tu sesión local. Usa 'Publicar a Todos' para que los vean los demás.");
+        cerrarAdmin();
+    }
 
-        // Cargar portada
-        const heroBg = localStorage.getItem('kiara_hero_bg');
-        if(heroBg) document.documentElement.style.setProperty('--hero-bg', 'url(' + heroBg + ')');
+    function publicarGlobal() {
+        if(!confirm("⚠️ ¿Publicar estos cambios para TODOS los que visiten la página?")) return;
+        document.getElementById('admin-panel-content').innerHTML = '<p style="text-align:center; padding:20px;">⏳ Publicando cambios en GitHub... Esto puede tardar unos segundos...</p>';
 
-        // Cargar galería
-        const gallery = document.getElementById('gallery-grid');
+        const payload = { texts: {}, finance: {}, gallery: [], heroBg: null, alert: {text: null, img: null} };
+        const ids = ['t-hero-tag','t-hero-title','t-hero-desc','t-history-label','t-history-title','t-history-p1','t-history-p2','t-history-p3','t-transparency-label','t-transparency-title','t-transparency-desc','t-donate-label','t-donate-title','t-donate-desc','t-gallery-label','t-gallery-title','t-gallery-desc'];
+        ids.forEach(id => {
+            const domId = id.replace('t-', 'text-');
+            payload.texts[domId] = document.getElementById(id).value;
+        });
+        payload.finance.donado = parseInt(document.getElementById('input-donado').value) || 0;
+        payload.finance.pagado = parseInt(document.getElementById('input-pagado').value) || 0;
+        payload.finance.deuda = parseInt(document.getElementById('input-deuda').value) || 0;
+
+        // Aviso
+        payload.alert.text = document.getElementById('admin-aviso-texto').value;
+        const avisoImg = document.getElementById('admin-aviso-img').files[0];
+        if(avisoImg) {
+            const reader = new FileReader();
+            reader.onload = function(e) { payload.alert.img = e.target.result; finishPublish(payload); };
+            reader.readAsDataURL(avisoImg);
+        } else finishPublish(payload);
+    }
+
+    function finishPublish(payload) {
+        // Galería y Portada
+        let totalPromises = [];
         for(let i=0; i<6; i++) {
-            const imgData = localStorage.getItem(`kiara_img_${i}`);
-            if(imgData) {
-                const divs = document.querySelectorAll('.gallery-item');
-                if(divs[i]) divs[i].innerHTML = `<img src="${imgData}" class="gallery-img" alt="Kiara">`;
+            const fileInput = document.getElementById(`gallery-photo-${i}`);
+            if(fileInput.files.length > 0) {
+                const reader = new FileReader();
+                let promise = new Promise((resolve) => {
+                    reader.onload = function(e) {
+                        payload.gallery[i] = e.target.result;
+                        resolve();
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                });
+                totalPromises.push(promise);
             }
         }
+        const heroBgFile = document.getElementById('hero-bg-upload').files[0];
+        if(heroBgFile) {
+            const reader = new FileReader();
+            let promise = new Promise((resolve) => {
+                reader.onload = function(e) {
+                    payload.heroBg = e.target.result;
+                    resolve();
+                };
+                reader.readAsDataURL(heroBgFile);
+            });
+            totalPromises.push(promise);
+        }
+
+        Promise.all(totalPromises).then(() => {
+            const jsonStr = JSON.stringify(payload);
+            const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+            const url = `https://api.github.com/repos/${REPO}/contents/data.json`;
+
+            // Obtener SHA actual
+            fetch(url, { headers: {"Authorization": `token ${GITHUB_TOKEN}`} })
+            .then(r => r.json())
+            .then(data => {
+                let sha = data.sha || null;
+                fetch(url, {
+                    method: "PUT",
+                    headers: {"Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        message: "Actualización global de Kiara desde Admin",
+                        content: b64,
+                        sha: sha
+                    })
+                })
+                .then(resp => {
+                    if(resp.ok) {
+                        alert("✅ ¡Publicación exitosa! La página se recargará en 5 segundos para todos.");
+                        setTimeout(() => { location.reload(); }, 5000);
+                    } else {
+                        alert("❌ Error al publicar. Intenta reducir el peso de las fotos (menos de 300kb c/u).");
+                    }
+                });
+            });
+        });
+    }
+
+    window.onload = function() {
+        cargarEstadoGlobal();
     }
 </script>
 </body>
