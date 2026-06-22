@@ -36,12 +36,14 @@
         .section-header p { color: #666; max-width: 500px; margin: 0 auto; }
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
         @media (max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; } }
+        .grid-4-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        @media (max-width: 768px) { .grid-4-col { grid-template-columns: 1fr 1fr; } }
 
-        .stats-box { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; }
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed var(--border-color); padding-bottom: 12px; }
+        .stats-box { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 16px; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; }
         .stat-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .stat-label { font-weight: 500; color: #666; }
-        .stat-value { font-weight: 700; font-size: 1.2rem; }
+        .stat-label { font-weight: 500; color: #666; font-size: 0.9rem; }
+        .stat-value { font-weight: 700; font-size: 1.1rem; }
         .stat-value.green { color: var(--green-accent); }
         .stat-value.red { color: var(--red-accent); }
 
@@ -62,7 +64,7 @@
         .gallery-placeholder { color: #999; text-align: center; font-size: 0.9rem; }
         .gallery-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* 🛠️ MODAL Y ADMIN PANEL (ARREGLADO PARA EVITAR BLOQUEOS) */
+        /* MODAL Y ADMIN PANEL ROBUSTO */
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
         .overlay.open { display: flex; }
         .modal-box { background: #fff; max-width: 550px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); position: relative; z-index: 10000; pointer-events: auto; }
@@ -131,17 +133,34 @@
             <h2 id="text-transparency-title">Donaciones vs. Deuda actual</h2>
             <p id="text-transparency-desc" style="max-width: 600px; margin: 0 auto; color: #666;">Actualizado conforme llegan apoyos y nuevos gastos médicos. Sin adornos — solo números reales.</p>
         </div>
-        <div class="grid-2-col" style="margin-bottom: 20px;">
+        
+        <!-- NUEVO DASHBOARD FINANCIERO CON 4 TARJETAS -->
+        <div class="grid-4-col" style="margin-bottom: 20px;">
             <div class="stats-box" style="background: #eef8f2; border-color: #b0d4be;">
                 <div class="stat-row"><span class="stat-label">💚 TOTAL DONADO</span><span class="stat-value green">$<span id="display-donado">0</span></span></div>
                 <div style="font-size:0.9rem; color:#666;">MXN recibidos hasta hoy</div>
             </div>
             <div class="stats-box" style="background: #fdf0ee; border-color: #e2b5aa;">
-                <div class="stat-row"><span class="stat-label">🔴 DEUDA ACUMULADA</span><span class="stat-value red">$<span id="display-deuda">0</span></span></div>
-                <div style="font-size:0.9rem; color:#666;">MXN de gastos médicos totales</div>
+                <div class="stat-row"><span class="stat-label">✅ TOTAL PAGADO</span><span class="stat-value red">$<span id="display-pagado">0</span></span></div>
+                <div style="font-size:0.9rem; color:#666;">MXN ya gastados en tratamientos</div>
+            </div>
+            <div class="stats-box" style="background: #fdf0ee; border-color: #e2b5aa;">
+                <div class="stat-row"><span class="stat-label">🔴 DEUDA PENDIENTE</span><span class="stat-value red">$<span id="display-deuda">0</span></span></div>
+                <div style="font-size:0.9rem; color:#666;">MXN que faltan por pagar</div>
+            </div>
+            <div class="stats-box" style="background: #fff4e6; border-color: #e2d4cc;">
+                <div class="stat-row"><span class="stat-label">📊 SALDO DISPONIBLE</span><span class="stat-value" id="display-saldo">$0</span></div>
+                <div style="font-size:0.9rem; color:#666;">Donado - Pagado (Dinero en caja)</div>
             </div>
         </div>
-        <div class="progress-wrapper"><div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div></div></div>
+
+        <div class="progress-wrapper">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.9rem; color:#666; text-align: right;" id="progress-text">Deuda cubierta: 0%</div>
+        </div>
+
         <div style="margin-top: 32px; border: 2px dashed var(--border-color); border-radius: 24px; padding: 24px; background: var(--bg-card);">
             <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 12px;">¿Cómo ayudas ahora mismo?</h4>
             <p><strong>Transferencia BBVA</strong><br>CLABE: 012 180 01512230293 2<br>Cuenta: 151 223 0293<br>Titular: Marco Antonio Castillo Gonzalez</p>
@@ -232,10 +251,11 @@
                 <input type="text" id="t-gallery-title" placeholder="Título">
                 <textarea id="t-gallery-desc" rows="2" placeholder="Descripción"></textarea>
 
-                <label>💰 Montos (Donado vs Deuda)</label>
-                <div style="display:flex; gap:8px;">
-                    <input type="number" id="input-donado" placeholder="Donado" style="flex:1;">
-                    <input type="number" id="input-deuda" placeholder="Deuda" style="flex:1;">
+                <label>💰 Finanzas (Donado / Pagado / Deuda)</label>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <input type="number" id="input-donado" placeholder="Donado" style="flex:1; min-width:80px;">
+                    <input type="number" id="input-pagado" placeholder="Pagado" style="flex:1; min-width:80px;">
+                    <input type="number" id="input-deuda" placeholder="Deuda" style="flex:1; min-width:80px;">
                 </div>
                 
                 <label>🖼️ Fotos de Galería (Sube hasta 6)</label>
@@ -263,16 +283,37 @@
     </footer>
 
 <script>
-    let DONADO = localStorage.getItem('kiara_donado') || 0;
-    let DEUDA = localStorage.getItem('kiara_deuda') || 0;
+    // Variables financieras: Donado, Pagado, Deuda
+    let DONADO = parseInt(localStorage.getItem('kiara_donado')) || 0;
+    let PAGADO = parseInt(localStorage.getItem('kiara_pagado')) || 0;
+    let DEUDA = parseInt(localStorage.getItem('kiara_deuda')) || 0;
 
     function actualizarInterfaz() {
-        document.getElementById('display-donado').textContent = parseInt(DONADO).toLocaleString();
-        document.getElementById('display-deuda').textContent = parseInt(DEUDA).toLocaleString();
-        const porcentaje = DEUDA > 0 ? Math.min((DONADO / DEUDA) * 100, 100) : 0;
+        // Mostrar números con formato
+        document.getElementById('display-donado').textContent = DONADO.toLocaleString();
+        document.getElementById('display-pagado').textContent = PAGADO.toLocaleString();
+        document.getElementById('display-deuda').textContent = DEUDA.toLocaleString();
+        
+        // Calcular Saldo
+        const saldo = DONADO - PAGADO;
+        const saldoEl = document.getElementById('display-saldo');
+        saldoEl.textContent = saldo.toLocaleString();
+        // Cambiar color del saldo si es positivo (verde) o negativo (rojo)
+        saldoEl.className = 'stat-value ' + (saldo >= 0 ? 'verde' : 'rojo');
+
+        // Barra de progreso: Porcentaje de deuda cubierta por el dinero donado
+        const totalDeuda = PAGADO + DEUDA;
+        let porcentaje = 0;
+        if (totalDeuda > 0) {
+            porcentaje = Math.min((DONADO / totalDeuda) * 100, 100);
+        } else {
+            porcentaje = 100; // Si no hay deuda, todo está pagado
+        }
+
         const barra = document.getElementById('progress-fill');
         barra.style.width = porcentaje + '%';
         barra.textContent = Math.round(porcentaje) + '%';
+        document.getElementById('progress-text').textContent = `Deuda cubierta: ${Math.round(porcentaje)}%`;
     }
 
     function abrirModal(icon, title, price) {
@@ -286,7 +327,7 @@
     function activarAdmin() {
         let pass = prompt("Ingrese contraseña de administrador:");
         if (pass === "111530") {
-            // Cargar textos en los inputs del admin
+            // Cargar textos y datos financieros en los inputs
             document.getElementById('t-hero-tag').value = document.getElementById('text-hero-tag').textContent;
             document.getElementById('t-hero-title').value = document.getElementById('text-hero-title').innerHTML;
             document.getElementById('t-hero-desc').value = document.getElementById('text-hero-desc').textContent;
@@ -306,7 +347,9 @@
             document.getElementById('t-gallery-desc').value = document.getElementById('text-gallery-desc').textContent;
             
             document.getElementById('input-donado').value = DONADO;
+            document.getElementById('input-pagado').value = PAGADO;
             document.getElementById('input-deuda').value = DEUDA;
+            
             document.getElementById('admin-overlay').classList.add('open');
             document.getElementById('admin-panel-content').style.display = 'block';
         } else if (pass !== null) { alert("Contraseña incorrecta"); }
@@ -374,16 +417,19 @@
             const val = document.getElementById(inputId).value;
             const el = document.getElementById(domId);
             if (el) {
-                if (domId === 'text-hero-title') el.innerHTML = val; // Permite <span> si existe
+                if (domId === 'text-hero-title') el.innerHTML = val; 
                 else el.textContent = val;
                 localStorage.setItem('kiara_text_' + domId, val);
             }
         }
 
-        // 2. Guardar Números
-        DONADO = document.getElementById('input-donado').value;
-        DEUDA = document.getElementById('input-deuda').value;
+        // 2. Guardar Variables Financieras
+        DONADO = parseInt(document.getElementById('input-donado').value) || 0;
+        PAGADO = parseInt(document.getElementById('input-pagado').value) || 0;
+        DEUDA = parseInt(document.getElementById('input-deuda').value) || 0;
+
         localStorage.setItem('kiara_donado', DONADO);
+        localStorage.setItem('kiara_pagado', PAGADO);
         localStorage.setItem('kiara_deuda', DEUDA);
         actualizarInterfaz();
 
@@ -392,7 +438,6 @@
         if (galleryFiles.length > 0) {
             const gallery = document.getElementById('gallery-grid');
             gallery.innerHTML = '';
-            let count = 0;
             for (let i = 0; i < Math.min(galleryFiles.length, 6); i++) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -401,7 +446,6 @@
                     div.innerHTML = `<img src="${e.target.result}" class="gallery-img" alt="Kiara">`;
                     gallery.appendChild(div);
                     localStorage.setItem(`kiara_img_${i}`, e.target.result);
-                    count++;
                 };
                 reader.readAsDataURL(galleryFiles[i]);
             }
@@ -433,13 +477,13 @@
             mostrarAviso();
         }
 
-        alert("✅ Textos, números y fotos guardados exitosamente.");
+        alert("✅ Textos, finanzas y fotos guardados exitosamente.");
         cerrarAdmin();
         location.reload();
     }
 
     window.onload = function() {
-        // Cargar Textos guardados
+        // Cargar Textos
         const textIds = [
             'text-hero-tag', 'text-hero-title', 'text-hero-desc',
             'text-history-label', 'text-history-title', 'text-history-p1', 'text-history-p2', 'text-history-p3',
