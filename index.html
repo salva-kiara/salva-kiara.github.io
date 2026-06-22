@@ -3,300 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiara Tracker - Tiempo Real & Transparencia</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Salvemos a Kiara 🐾</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #111827; color: #f3f4f6; font-family: 'Courier New', Courier, monospace; }
-        .escena-3d { perspective: 1000px; height: 240px; }
-        .mundo { transform: rotateX(60deg) rotateZ(-45deg); transform-style: preserve-3d; transition: all 0.5s ease; }
-        .bloque-piso { width: 120px; height: 120px; background: #15803d; position: relative; transform-style: preserve-3d; box-shadow: -10px 10px 0 #166534; }
-        .avatar-kiara { position: absolute; bottom: 20px; left: 20px; width: 50px; height: 50px; background: #d97706; transform: translateZ(25px) rotateX(-60deg) rotateY(45deg); transform-style: preserve-3d; box-shadow: -5px 5px 0 #b45309; transition: all 0.5s ease; }
+        :root {
+            --bg-page: #f5ede7; --bg-card: #fff9f5; --text-main: #2c1e18;
+            --red-accent: #b85a46; --green-accent: #4a9e6f; --border-color: #e2d4cc;
+            --transparent-bg: rgba(0, 0, 0, 0.6);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-page); color: var(--text-main); }
         
-        .estado-Durmiendo { background: #b45309; height: 25px; animation: flotar 3s infinite ease-in-out; }
-        .estado-Comiendo { background: #f59e0b; animation: comer 0.5s infinite alternate; }
-        .estado-Estudios { background: #ef4444; border: 3px solid #fff; animation: pulso 1.5s infinite; }
-        .estado-Jugando { background: #10b981; animation: saltar 0.6s infinite alternate; }
+        /* Hero Section - Imagen de Fondo */
+        .hero {
+            position: relative; height: 100vh; width: 100%;
+            background: url('https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=2574&auto=format&fit=crop') center/cover no-repeat;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0; background: var(--transparent-bg); z-index: 1;
+        }
+        .hero-content {
+            position: relative; z-index: 2; text-align: center; max-width: 800px; padding: 20px; color: #fff;
+        }
+        .hero-tag {
+            display: inline-block; background: rgba(255,255,255,0.2); padding: 6px 16px;
+            border-radius: 20px; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 24px; backdrop-filter: blur(4px);
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700;
+            margin-bottom: 16px; text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .hero h1 span { display: block; font-style: italic; color: var(--red-accent); }
+        .hero p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
+        
+        .btn-primary {
+            display: inline-block; background: var(--red-accent); color: #fff; text-decoration: none;
+            padding: 16px 32px; border-radius: 50px; font-weight: 600; transition: 0.3s ease;
+        }
+        .btn-primary:hover { background: #9e4736; transform: translateY(-2px); }
 
-        @keyframes flotar { 0%, 100% { transform: translateZ(15px) rotateX(-60deg); } 50% { transform: translateZ(25px) rotateX(-60deg); } }
-        @keyframes comer { 0% { transform: translateZ(25px) translateY(0); } 100% { transform: translateZ(25px) translateY(5px); } }
-        @keyframes saltar { 0% { transform: translateZ(25px); } 100% { transform: translateZ(50px); } }
-        @keyframes pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        /* Secciones Comunes */
+        .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px; }
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 12px; }
+        .section-header p { color: #666; max-width: 500px; margin: 0 auto; }
+        .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        @media (max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; } }
+
+        /* Estadísticas */
+        .stats-box {
+            background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px;
+        }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed var(--border-color); padding-bottom: 12px; }
+        .stat-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .stat-label { font-weight: 500; color: #666; }
+        .stat-value { font-weight: 700; font-size: 1.2rem; }
+        .stat-value.green { color: var(--green-accent); }
+        .stat-value.red { color: var(--red-accent); }
+
+        /* Barra de progreso */
+        .progress-wrapper { background: var(--bg-card); border-radius: 24px; padding: 4px; border: 1px solid var(--border-color); margin-top: 24px; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green-accent), var(--red-accent)); width: 0%; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: #fff; font-size: 0.8rem; font-weight: bold; }
+
+        /* Tarjetas de donación */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+        .donation-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 24px; text-align: center; }
+        .donation-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin: 16px 0; }
+        .price-tag { font-size: 2rem; color: var(--red-accent); font-weight: 700; margin-bottom: 12px; }
+        .btn-donate { background: #f5ede7; border: 1px solid var(--border-color); padding: 12px; border-radius: 50px; width: 100%; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-donate:hover { background: var(--text-main); color: #fff; }
+
+        /* Bitácora de fotos */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 768px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
+        .gallery-item {
+            aspect-ratio: 1/1; background: #e6dcd4; border-radius: 16px; border: 1px solid var(--border-color);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;
+            position: relative; background-size: cover; background-position: center; background-color: #e6dcd4;
+        }
+        .gallery-placeholder { color: #999; text-align: center; font-size: 0.9rem; }
+        .gallery-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* Modales y Admin */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 999; display: none; align-items: center; justify-content: center; }
+        .overlay.open { display: flex; }
+        .modal-box { background: #fff; max-width: 450px; width: 100%; border-radius: 24px; padding: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-box h3 { text-align: center; font-family: 'Playfair Display', serif; margin-bottom: 20px; }
+        
+        /* Admin Panel Oculta */
+        .admin-trigger { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; z-index: 990; color: rgba(0,0,0,0.3); transition: 0.3s; }
+        .admin-trigger:hover { color: #000; }
+        .admin-panel { display: none; text-align: left; }
+        .admin-panel label { display: block; font-weight: 600; margin: 12px 0 4px; }
+        .admin-panel input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; }
+        .admin-panel .btn-save { width: 100%; background: var(--text-main); color: #fff; padding: 12px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
+        .admin-panel .btn-save:hover { background: var(--red-accent); }
+
+        footer { text-align: center; padding: 40px; background: #2c1e18; color: #888; margin-top: 40px; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-    <div class="max-w-5xl mx-auto space-y-8">
-        
-        <!-- HEADER -->
-        <header class="border-4 border-dashed border-amber-500 p-6 bg-gray-900 rounded-xl text-center shadow-xl">
-            <h1 class="text-4xl font-extrabold text-amber-400 uppercase tracking-widest">Kiara Real-Time</h1>
-            <p class="text-sm text-gray-400 mt-2">Bitácora interactiva de salud, transparencia financiera y su nueva vida.</p>
-            <div id="badge-estado" class="mt-4 inline-block bg-amber-950 text-amber-300 px-4 py-1.5 rounded-full font-bold text-xs uppercase border border-amber-500 animate-pulse">
-                Estado: Cargando...
-            </div>
-        </header>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-tag">SALVEMOS A KIARA • JUNIO 2026</span>
+            <h1>Ella confía en que <span>no la vamos a dejar.</span></h1>
+            <p>Kiara tiene una masa en el bazo y líquido en el abdomen. El proceso será largo. Su cuerpo trabaja en la tierra y su espíritu en la eternidad. No la dejaremos sola.</p>
+            <a href="#transparencia" class="btn-primary">Apoya a Kiara</a>
+        </div>
+    </section>
 
-        <!-- ESCENARIO 3D INTERACTIVO -->
-        <section class="bg-gray-950 p-6 rounded-xl border border-gray-800 flex flex-col md:flex-row items-center justify-around overflow-hidden gap-6">
-            <div class="escena-3d w-full max-w-[250px] flex items-center justify-center">
-                <div class="mundo">
-                    <div class="bloque-piso">
-                        <div id="avatar" class="avatar-kiara"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 space-y-3">
-                <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">🕹️ Simulación del Entorno</h2>
-                <p id="txt-descripcion" class="text-gray-300 bg-gray-900 p-4 rounded-lg border-l-4 border-amber-500 italic">
-                    Cargando estatus...
-                </p>
-            </div>
-        </section>
-
-        <!-- BALANCE DE TRANSPARENCIA -->
-        <section class="bg-gray-900 p-6 rounded-xl border border-gray-800 space-y-6">
-            <h2 class="text-2xl font-bold text-emerald-400">📊 Transparencia Financiera</h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
-                <div class="bg-gray-950 p-3 rounded border border-gray-800">
-                    <div class="text-xs text-gray-400 uppercase">Donaciones</div>
-                    <div id="fin-donaciones" class="text-lg font-bold text-emerald-400">$0</div>
-                </div>
-                <div class="bg-gray-950 p-3 rounded border border-gray-800">
-                    <div class="text-xs text-gray-400 uppercase">Aporte Marco</div>
-                    <div id="fin-propio" class="text-lg font-bold text-blue-400">$0</div>
-                </div>
-                <div class="bg-gray-950 p-3 rounded border border-gray-800">
-                    <div class="text-xs text-gray-400 uppercase">Gastos Pagados</div>
-                    <div id="fin-pagados" class="text-lg font-bold text-gray-300">$0</div>
-                </div>
-                <div class="bg-gray-950 p-3 rounded border border-gray-800">
-                    <div class="text-xs text-gray-400 uppercase">Por Pagar</div>
-                    <div id="fin-porpagar" class="text-lg font-bold text-red-400">$0</div>
-                </div>
-                <div class="bg-gray-950 p-3 rounded border border-emerald-500/30 col-span-2 md:col-span-1">
-                    <div class="text-xs text-emerald-300 uppercase font-bold">Saldo Neto</div>
-                    <div id="fin-neto" class="text-xl font-black">0</div>
-                </div>
-            </div>
-
-            <!-- MONETIZACIÓN & DETALLES -->
-            <div class="bg-gray-950 p-5 rounded-xl border-2 border-emerald-500/40 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h3 class="text-lg font-bold text-amber-400 mb-2">🎁 Apoya al Fondo de Kiara</h3>
-                    <p class="text-sm text-gray-300 mb-4">Aporta de forma directa y segura mediante nuestra pasarela:</p>
-                    <a href="https://clip.mx/@marcocastillo" target="_blank" class="inline-block w-full text-center bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black py-3 px-6 rounded-lg uppercase tracking-wider shadow-lg transform active:scale-95 transition-all">
-                        💳 Donar Vía Clip
-                    </a>
-                </div>
-                <div class="space-y-3 bg-gray-900 p-4 rounded-lg border border-gray-800 text-xs">
-                    <h4 class="font-bold text-emerald-400 text-sm uppercase">Cuentas de Depósito / OXXO</h4>
-                    <p id="txt-bbva" class="bg-gray-950 p-2 rounded text-gray-300 select-all border border-gray-800"></p>
-                    <p id="txt-oxxo" class="bg-gray-950 p-2 rounded text-gray-300 select-all border border-gray-800"></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- LÍNEAS DEL TIEMPO -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- HISTORIA -->
+    <div class="container" id="historia">
+        <div class="section-header">
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">Lo que pasó</span>
+            <h2>Kiara, la noche que nos cambió todo</h2>
+        </div>
+        <div class="grid-2-col">
             <div>
-                <h2 class="text-2xl font-bold text-amber-400 border-b-2 border-amber-500 pb-2 mb-4">⏱️ Tiempo Real (Presente)</h2>
-                <div id="feed-presente" class="space-y-4"></div>
+                <p style="margin-bottom: 20px; line-height:1.8;">El 22 de junio de 2026, Kiara fue llevada de emergencia al veterinario en la Ciudad de México. Los estudios revelaron una masa en el bazo y líquido libre en el abdomen.</p>
+                <p style="margin-bottom: 20px; line-height:1.8;">Marco — su dueño — forma parte de una unidad que trabaja en regiones remotas de la sierra y no puede parar. No está en la ciudad. Kiara está aquí, pero su cuidado no puede esperar.</p>
+                <p style="margin-bottom: 20px; line-height:1.8;">El veterinario fue claro: esto será un proceso largo. La deuda irá creciendo conforme avancen los estudios, la cirugía y la recuperación. Todo lo que aparece aquí es real y verificable.</p>
             </div>
             <div>
-                <h2 class="text-2xl font-bold text-purple-400 border-b-2 border-purple-500 pb-2 mb-4">📜 Su Vida Anterior (Pasado)</h2>
-                <div id="feed-pasado" class="space-y-4"></div>
-            </div>
-        </section>
-
-        <!-- ACCESO ADMIN -->
-        <div class="text-center pt-8">
-            <button onclick="abrirAdmin()" class="text-xs text-gray-700 hover:text-amber-500 transition-colors">⚙️ Modo Administrador</button>
-        </div>
-
-        <!-- VENTANA FLOTANTE PANEL CONTROL -->
-        <div id="modal-admin" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50 overflow-y-auto">
-            <div class="bg-gray-900 border-2 border-amber-500 p-6 rounded-xl max-w-xl w-full space-y-4 font-mono text-sm max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-                    <h3 class="text-amber-400 font-bold text-lg">⚙️ Consola Administrativa</h3>
-                    <button onclick="cerrarAdmin()" class="text-red-500 font-bold">X</button>
-                </div>
-                
-                <div>
-                    <label class="block text-xs text-gray-400 mb-1">Estado Kiara (3D Animación):</label>
-                    <select id="adm-estado" class="w-full bg-gray-950 border border-gray-700 p-2 rounded text-amber-300">
-                        <option value="Durmiendo">Durmiendo</option>
-                        <option value="Comiendo">Comiendo / Desayunando</option>
-                        <option value="Jugando">Jugando</option>
-                        <option value="Estudios">Estudios / Sacada de Sangre</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs text-gray-400 mb-1">Estatus Actual:</label>
-                    <input type="text" id="adm-descripcion" class="w-full bg-gray-950 border border-gray-700 p-2 rounded">
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs text-gray-400">Donaciones ($):</label>
-                        <input type="number" id="adm-donaciones" class="w-full bg-gray-950 border border-gray-700 p-2 rounded">
+                <div class="stats-box">
+                    <div class="stat-row">
+                        <span class="stat-label">Diagnóstico</span>
+                        <span class="stat-value red">Masa en bazo (>8cm)</span>
                     </div>
-                    <div>
-                        <label class="block text-xs text-gray-400">Aporte Propio ($):</label>
-                        <input type="number" id="adm-propio" class="w-full bg-gray-950 border border-gray-700 p-2 rounded">
+                    <div class="stat-row">
+                        <span class="stat-label">Complicación</span>
+                        <span class="stat-value red">Líquido en abdomen</span>
                     </div>
-                    <div>
-                        <label class="block text-xs text-gray-400">Gastos Pagados ($):</label>
-                        <input type="number" id="adm-pagados" class="w-full bg-gray-950 border border-gray-700 p-2 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400">Por Pagar ($):</label>
-                        <input type="number" id="adm-porpagar" class="w-full bg-gray-950 border border-gray-700 p-2 rounded">
+                    <div class="stat-row">
+                        <span class="stat-label">Estado</span>
+                        <span class="stat-value">Hospitalizada en estado grave</span>
                     </div>
                 </div>
-
-                <div>
-                    <label class="block text-xs text-gray-400">Datos Cuenta BBVA:</label>
-                    <input type="text" id="adm-bbva" class="w-full bg-gray-950 border border-gray-700 p-2 rounded text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs text-gray-400">Datos Tarjeta OXXO:</label>
-                    <input type="text" id="adm-oxxo" class="w-full bg-gray-950 border border-gray-700 p-2 rounded text-xs">
-                </div>
-
-                <div class="border-t border-gray-800 pt-3 space-y-2">
-                    <h4 class="text-xs text-purple-400 font-bold">Agregar Ticket / Foto / Evento</h4>
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="adm-tipo-act" class="bg-gray-950 border border-gray-700 p-1 rounded text-xs">
-                            <option value="presente">Presente (Tiempo Real)</option>
-                            <option value="pasado">Pasado (Vida Anterior)</option>
-                        </select>
-                        <input type="text" id="adm-tit-act" placeholder="Título" class="bg-gray-950 border border-gray-700 p-1 rounded text-xs">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="adm-fec-act" placeholder="Fecha" class="bg-gray-950 border border-gray-700 p-1 rounded text-xs">
-                        <input type="url" id="adm-img-act" placeholder="URL Imagen" class="bg-gray-950 border border-gray-700 p-1 rounded text-xs">
-                    </div>
-                    <textarea id="adm-des-act" placeholder="Descripción..." class="w-full bg-gray-950 border border-gray-700 p-1 rounded text-xs h-12"></textarea>
-                    <button type="button" onclick="agregarActividad()" class="w-full bg-purple-700 text-white text-xs py-1 rounded font-bold">Insertar Evento</button>
-                </div>
-
-                <button onclick="guardarDatosAdmin()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded">Guardar Cambios Locales</button>
             </div>
         </div>
-
     </div>
 
-    <script>
-        const defaultDB = {
-          estado_actual: "Durmiendo",
-          descripcion_estado: "Kiara está descansando en su camita virtual recuperando energía.",
-          finanzas: { donaciones_recibidas: 2500, fondo_propio: 1200, gastos_pagados: 1800, gastos_por_pagar: 950 },
-          cuentas: { bbva: "BBVA: CLABE 0121 8001 2345 6789 01 (A nombre de Marco Castillo)", oxxo: "Depósito OXXO: Tarjeta 4766 8401 2345 6789" },
-          actualizaciones: [
-            { tipo: "presente", titulo: "¡Tratamiento inicial iniciado!", fecha: "Hoy", descripcion: "Le sacaron sangre temprano para estudios completos.", imagen: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400" },
-            { tipo: "pasado", titulo: "Su vida anterior", fecha: "Rescate", descripcion: "Así la encontramos, flaquita pero con ganas de luchar.", imagen: "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&q=80&w=400" }
-          ]
-        };
+    <!-- TRANSPARENCIA (DONADO VS DEUDA) -->
+    <div class="container" id="transparencia">
+        <div class="section-header">
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">TRANSPARENCIA TOTAL</span>
+            <h2>Donaciones vs. Deuda actual</h2>
+            <p>Actualizado conforme llegan apoyos y nuevos gastos médicos. Sin adornos — solo números reales.</p>
+        </div>
+        
+        <div class="grid-2-col" style="margin-bottom: 20px;">
+            <div class="stats-box" style="background: #eef8f2; border-color: #b0d4be;">
+                <div class="stat-row">
+                    <span class="stat-label">💚 TOTAL DONADO</span>
+                    <span class="stat-value green">$<span id="display-donado">0</span></span>
+                </div>
+                <div style="font-size:0.9rem; color:#666;">MXN recibidos hasta hoy</div>
+            </div>
+            <div class="stats-box" style="background: #fdf0ee; border-color: #e2b5aa;">
+                <div class="stat-row">
+                    <span class="stat-label">🔴 DEUDA ACUMULADA</span>
+                    <span class="stat-value red">$<span id="display-deuda">0</span></span>
+                </div>
+                <div style="font-size:0.9rem; color:#666;">MXN de gastos médicos totales</div>
+            </div>
+        </div>
 
-        function init() {
-            if(!localStorage.getItem('kiara_db')) {
-                localStorage.setItem('kiara_db', JSON.stringify(defaultDB));
-            }
-            render();
-        }
+        <div class="progress-wrapper">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.9rem; color:#666; text-align: right;" id="progress-text">Meta alcanzada: 0%</div>
+        </div>
 
-        function render() {
-            const db = JSON.parse(localStorage.getItem('kiara_db'));
-            document.getElementById('badge-estado').innerText = "Estado: " + db.estado_actual;
-            document.getElementById('txt-descripcion').innerText = `"${db.descripcion_estado}"`;
-            document.getElementById('avatar').className = "avatar-kiara estado-" + db.estado_actual;
-            document.getElementById('fin-donaciones').innerText = "$" + db.finanzas.donaciones_recibidas;
-            document.getElementById('fin-propio').innerText = "$" + db.finanzas.fondo_propio;
-            document.getElementById('fin-pagados').innerText = "$" + db.finanzas.gastos_pagados;
-            document.getElementById('fin-porpagar').innerText = "$" + db.finanzas.gastos_por_pagar;
+        <div style="margin-top: 32px; border: 2px dashed var(--border-color); border-radius: 24px; padding: 24px; background: var(--bg-card);">
+            <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 12px;">¿Cómo ayudas ahora mismo?</h4>
+            <p><strong>Transferencia BBVA</strong><br>
+            CLABE: 012 180 01512230293 2<br>
+            Cuenta: 151 223 0293<br>
+            Titular: Marco Antonio Castillo Gonzalez</p>
+            <p style="margin-top: 12px; font-size:0.9rem; background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-color);">Concepto: Kiara – Apoyo médico. Envía tu comprobante al WhatsApp.</p>
+        </div>
+    </div>
+
+    <!-- APOYO SIMBÓLICO -->
+    <div class="container" style="padding-top: 40px;">
+        <div class="section-header">
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">APOYO SIMBÓLICO</span>
+            <h2>Sabes exactamente a qué va tu apoyo</h2>
+            <p>No es una donación genérica. Elige lo que puedas — todo suma a la deuda real de Kiara.</p>
+        </div>
+        <div class="cards-grid">
+            <div class="donation-card">
+                <div style="font-size: 2.5rem;">🍪</div>
+                <h3>Una Croqueta de Energía</h3>
+                <div class="price-tag">$10 MXN</div>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Granito de arena para su alimentación y suero diario.</p>
+                <button class="btn-donate" onclick="abrirModal('🍪', 'Una Croqueta de Energía', '10')">Aportar →</button>
+            </div>
+            <div class="donation-card">
+                <div style="font-size: 2.5rem;">🎖️</div>
+                <h3>Premio de Visita</h3>
+                <div class="price-tag">$20 MXN</div>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Para sus revisiones diarias en el hospital.</p>
+                <button class="btn-donate" onclick="abrirModal('🎖️', 'Premio de Visita', '20')">Aportar →</button>
+            </div>
+            <div class="donation-card">
+                <div style="font-size: 2.5rem;">🩹</div>
+                <h3>Kit de Curación</h3>
+                <div class="price-tag">$50 MXN</div>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Materiales de limpieza y antisépticos del hospital.</p>
+                <button class="btn-donate" onclick="abrirModal('🩹', 'Kit de Curación', '50')">Aportar →</button>
+            </div>
+            <div class="donation-card">
+                <div style="font-size: 2.5rem;">💊</div>
+                <h3>Una Dosis de Medicina</h3>
+                <div class="price-tag">$100 MXN</div>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Pastillas, antibióticos y suero de recuperación.</p>
+                <button class="btn-donate" onclick="abrirModal('💊', 'Una Dosis de Medicina', '100')">Aportar →</button>
+            </div>
+            <div class="donation-card">
+                <div style="font-size: 2.5rem;">🔬</div>
+                <h3>Patrocinador de Lab</h3>
+                <div class="price-tag">$200 MXN</div>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Financia estudios clínicos y análisis de sangre.</p>
+                <button class="btn-donate" onclick="abrirModal('🔬', 'Patrocinador de Lab', '200')">Aportar →</button>
+            </div>
+            <div class="donation-card">
+                <div style="font-size: 2.5rem;">🏥</div>
+                <h3>Guerrero Quirúrgico</h3>
+                <div class="price-tag">$500 MXN</div>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Aportación grande que acerca su cirugía. Eres parte del equipo.</p>
+                <button class="btn-donate" onclick="abrirModal('🏥', 'Guerrero Quirúrgico', '500')">Aportar →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BITÁCORA CON FOTOS -->
+    <div class="container" id="bitacora">
+        <div class="section-header">
+            <span style="color:var(--red-accent); font-weight:600; letter-spacing:1px; text-transform:uppercase; font-size:0.9rem;">BITÁCORA CON FOTOS</span>
+            <h2>Kiara, día a día</h2>
+            <p>Marco actualiza esta sección conforme hay noticias. Aquí puedes ver su evolución real.</p>
+        </div>
+        
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Placeholders que se reemplazarán con fotos subidas desde el Admin -->
+            <div class="gallery-item" id="img-placeholder-1">
+                <div class="gallery-placeholder">📸<br>Sin foto<br><span style="font-size:0.8rem;">Sube una desde el Admin</span></div>
+            </div>
+            <div class="gallery-item" id="img-placeholder-2">
+                <div class="gallery-placeholder">📸<br>Sin foto</div>
+            </div>
+            <div class="gallery-item" id="img-placeholder-3">
+                <div class="gallery-placeholder">📸<br>Sin foto</div>
+            </div>
+            <div class="gallery-item" id="img-placeholder-4">
+                <div class="gallery-placeholder">📸<br>Sin foto</div>
+            </div>
+            <div class="gallery-item" id="img-placeholder-5">
+                <div class="gallery-placeholder">📸<br>Sin foto</div>
+            </div>
+            <div class="gallery-item" id="img-placeholder-6">
+                <div class="gallery-placeholder">📸<br>Sin foto</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DONACIÓN -->
+    <div class="overlay" id="donate-modal">
+        <div class="modal-box">
+            <div style="text-align: right; cursor: pointer;" onclick="cerrarModal()">✕</div>
+            <div style="font-size: 3rem; text-align:center; margin: 10px 0;" id="modal-icon"></div>
+            <h3 id="modal-title"></h3>
+            <div style="font-size: 2rem; font-weight:700; color:var(--red-accent); text-align:center; margin: 16px 0;">$<span id="modal-price"></span> MXN</div>
             
-            const neto = db.finanzas.donaciones_recibidas + db.finanzas.fondo_propio - db.finanzas.gastos_pagados;
-            const elNeto = document.getElementById('fin-neto');
-            elNeto.innerText = "$" + neto;
-            elNeto.className = "text-xl font-black " + (neto >= 0 ? "text-emerald-400" : "text-red-400");
+            <div style="background: var(--bg-card); border:1px solid var(--border-color); border-radius: 16px; padding: 20px; margin: 20px 0;">
+                <strong>Transferencia BBVA</strong><br>
+                CLABE: 012 180 01512230293 2<br>
+                Cuenta: 151 223 0293<br>
+                Titular: Marco Antonio Castillo Gonzalez
+            </div>
+            <a href="https://wa.me/528147090338?text=Hola%20Marco%2C%20ya%20aport%C3%A9%20para%20Kiara%20%F0%9F%90%BE" target="_blank" style="display:block; text-align:center; background:#009ee3; color:#fff; text-decoration:none; padding:16px; border-radius:50px; font-weight:600;">📲 Confirmar por WhatsApp</a>
+        </div>
+    </div>
 
-            document.getElementById('txt-bbva').innerText = db.cuentas.bbva;
-            document.getElementById('txt-oxxo').innerText = db.cuentas.oxxo;
+    <!-- ADMIN PANEL OCULTO (Acceso con contraseña 111530) -->
+    <button class="admin-trigger" onclick="activarAdmin()">🔒</button>
+    <div class="overlay" id="admin-overlay">
+        <div class="modal-box">
+            <div style="text-align: right; cursor: pointer;" onclick="cerrarAdmin()">✕</div>
+            <h3>🔐 Panel de Administración</h3>
+            <div class="admin-panel" id="admin-panel-content">
+                <label>Actualizar Donado ($MXN)</label>
+                <input type="number" id="input-donado" value="0">
+                
+                <label>Actualizar Deuda Total ($MXN)</label>
+                <input type="number" id="input-deuda" value="0">
 
-            const fPres = document.getElementById('feed-presente');
-            const fPas = document.getElementById('feed-pasado');
-            fPres.innerHTML = ""; fPas.innerHTML = "";
+                <label style="margin-top: 20px; border-top:1px solid #eee; padding-top:20px;">Actualizar Fotos de Kiara</label>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:12px;">Selecciona hasta 6 fotos (se guardarán localmente en tu navegador).</p>
+                <input type="file" id="admin-photo-upload" accept="image/*" multiple style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
+                
+                <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
 
-            db.actualizaciones.forEach(act => {
-                const html = `
-                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-3">
-                        <div class="flex justify-between text-xs font-bold ${act.tipo === 'presente' ? 'text-amber-500' : 'text-purple-400'}">
-                            <span>${act.titulo}</span>
-                            <span>${act.fecha}</span>
-                        </div>
-                        <p class="text-sm text-gray-300">${act.descripcion}</p>
-                        ${act.imagen ? `<img src="${act.imagen}" class="w-full h-48 object-cover rounded-lg border border-gray-800">` : ''}
-                    </div>
-                `;
-                if(act.tipo === 'presente') fPres.innerHTML += html;
-                else fPas.innerHTML += html;
-            });
+    <footer>
+        <p><strong>Hecho con ♥ para Kiara</strong> · Marco Antonio Castillo González · Junio 2026</p>
+        <p style="margin-top: 8px; font-size:0.8rem;">Toda la información es verificable. 100% de los donativos van a veterinarios.</p>
+    </footer>
+
+<script>
+    // Cargar datos guardados en el navegador (localStorage)
+    let DONADO = localStorage.getItem('kiara_donado') || 0;
+    let DEUDA = localStorage.getItem('kiara_deuda') || 0;
+
+    function actualizarInterfaz() {
+        document.getElementById('display-donado').textContent = parseInt(DONADO).toLocaleString();
+        document.getElementById('display-deuda').textContent = parseInt(DEUDA).toLocaleString();
+        
+        const porcentaje = DEUDA > 0 ? Math.min((DONADO / DEUDA) * 100, 100) : 0;
+        const barra = document.getElementById('progress-fill');
+        barra.style.width = porcentaje + '%';
+        barra.textContent = Math.round(porcentaje) + '%';
+        document.getElementById('progress-text').textContent = `Meta alcanzada: ${Math.round(porcentaje)}%`;
+    }
+
+    function abrirModal(icon, title, price) {
+        document.getElementById('modal-icon').textContent = icon;
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-price').textContent = price;
+        document.getElementById('donate-modal').classList.add('open');
+    }
+
+    function cerrarModal() {
+        document.getElementById('donate-modal').classList.remove('open');
+    }
+
+    // ADMINISTRACIÓN
+    function activarAdmin() {
+        let pass = prompt("Ingrese contraseña de administrador:");
+        if (pass === "111530") {
+            document.getElementById('input-donado').value = DONADO;
+            document.getElementById('input-deuda').value = DEUDA;
+            document.getElementById('admin-overlay').classList.add('open');
+            document.getElementById('admin-panel-content').style.display = 'block';
+        } else if (pass !== null) {
+            alert("Contraseña incorrecta");
         }
+    }
 
-        function abrirAdmin() {
-            const pass = prompt("Introduce tu contraseña administrativa:");
-            if(pass === "1530") {
-                const db = JSON.parse(localStorage.getItem('kiara_db'));
-                document.getElementById('adm-estado').value = db.estado_actual;
-                document.getElementById('adm-descripcion').value = db.descripcion_estado;
-                document.getElementById('adm-donaciones').value = db.finanzas.donaciones_recibidas;
-                document.getElementById('adm-propio').value = db.finanzas.fondo_propio;
-                document.getElementById('adm-pagados').value = db.finanzas.gastos_pagados;
-                document.getElementById('adm-porpagar').value = db.finanzas.gastos_por_pagar;
-                document.getElementById('adm-bbva').value = db.cuentas.bbva;
-                document.getElementById('adm-oxxo').value = db.cuentas.oxxo;
-                document.getElementById('modal-admin').classList.remove('hidden');
-            } else {
-                alert("Acceso inválido.");
+    function cerrarAdmin() {
+        document.getElementById('admin-overlay').classList.remove('open');
+    }
+
+    function guardarCambiosAdmin() {
+        // Guardar números
+        DONADO = document.getElementById('input-donado').value;
+        DEUDA = document.getElementById('input-deuda').value;
+        
+        localStorage.setItem('kiara_donado', DONADO);
+        localStorage.setItem('kiara_deuda', DEUDA);
+        actualizarInterfaz();
+
+        // Guardar fotos
+        const files = document.getElementById('admin-photo-upload').files;
+        if (files.length > 0) {
+            const gallery = document.getElementById('gallery-grid');
+            // Limpiar grid actual (excepto placeholders o reemplazándolos)
+            gallery.innerHTML = '';
+            let count = 0;
+            for (let i = 0; i < Math.min(files.length, 6); i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'gallery-item';
+                    div.innerHTML = `<img src="${e.target.result}" class="gallery-img" alt="Kiara">`;
+                    gallery.appendChild(div);
+                    // Almacenar la imagen en base64 en localStorage para persistencia (puede haber límite de tamaño)
+                    localStorage.setItem(`kiara_img_${i}`, e.target.result);
+                    count++;
+                    if(count === Math.min(files.length, 6)) {
+                        alert("✅ Datos y fotos guardados exitosamente en tu navegador.");
+                        cerrarAdmin();
+                        location.reload(); // Recargar para aplicar las fotos desde localStorage
+                    }
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        } else {
+            alert("✅ Datos guardados exitosamente.");
+            cerrarAdmin();
+        }
+    }
+
+    // Cargar fotos guardadas al inicio
+    window.onload = function() {
+        actualizarInterfaz();
+        const gallery = document.getElementById('gallery-grid');
+        let hasImages = false;
+        for(let i=0; i<6; i++) {
+            const imgData = localStorage.getItem(`kiara_img_${i}`);
+            if(imgData) {
+                hasImages = true;
+                const placeholders = document.querySelectorAll('.gallery-item');
+                if(placeholders[i]) {
+                    placeholders[i].innerHTML = `<img src="${imgData}" class="gallery-img" alt="Kiara">`;
+                }
             }
         }
-
-        function cerrarAdmin() { document.getElementById('modal-admin').classList.add('hidden'); }
-
-        function guardarDatosAdmin() {
-            const db = JSON.parse(localStorage.getItem('kiara_db'));
-            db.estado_actual = document.getElementById('adm-estado').value;
-            db.descripcion_estado = document.getElementById('adm-descripcion').value;
-            db.finanzas.donaciones_recibidas = parseFloat(document.getElementById('adm-donaciones').value || 0);
-            db.finanzas.fondo_propio = parseFloat(document.getElementById('adm-propio').value || 0);
-            db.finanzas.gastos_pagados = parseFloat(document.getElementById('adm-pagados').value || 0);
-            db.finanzas.gastos_por_pagar = parseFloat(document.getElementById('adm-porpagar').value || 0);
-            db.cuentas.bbva = document.getElementById('adm-bbva').value;
-            db.cuentas.oxxo = document.getElementById('adm-oxxo').value;
-            localStorage.setItem('kiara_db', JSON.stringify(db));
-            render(); cerrarAdmin();
-        }
-
-        function agregarActividad() {
-            const db = JSON.parse(localStorage.getItem('kiara_db'));
-            const nueva = {
-                tipo: document.getElementById('adm-tipo-act').value,
-                titulo: document.getElementById('adm-tit-act').value,
-                fecha: document.getElementById('adm-fec-act').value,
-                descripcion: document.getElementById('adm-des-act').value,
-                imagen: document.getElementById('adm-img-act').value
-            };
-            if(!nueva.titulo || !nueva.fecha || !nueva.descripcion) return alert("Completa los datos esenciales.");
-            db.actualizaciones.unshift(nueva);
-            localStorage.setItem('kiara_db', JSON.stringify(db));
-            render();
-            document.getElementById('adm-tit-act').value = "";
-            document.getElementById('adm-fec-act').value = "";
-            document.getElementById('adm-des-act').value = "";
-            document.getElementById('adm-img-act').value = "";
-        }
-        init();
-    </script>
+    }
+</script>
 </body>
 </html>
