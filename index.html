@@ -332,7 +332,12 @@
         <label>Foto de Evidencia (Aviso)</label>
         <input type="file" id="admin-aviso-img" accept="image/*" style="margin-bottom:20px; border:1px solid #ccc; padding:8px;">
 
-                <button class="btn-save" onclick="guardarCambiosAdmin()">Guardar Cambios</button>
+                
+        <div style="display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap;">
+            <button onclick="eliminarPortada()" style="flex:1; background:#b85a46; color:#fff; border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:600;">🗑️ Eliminar Portada</button>
+            <button onclick="eliminarGaleria()" style="flex:1; background:#b85a46; color:#fff; border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:600;">🗑️ Eliminar Fotos Galería</button>
+        </div>
+<button class="btn-save" onclick="guardarCambiosAdmin()">Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -342,7 +347,29 @@
         <p style="margin-top: 8px; font-size:0.8rem;">Toda la información es verificable. 100% de los donativos van a veterinarios.</p>
     </footer>
 
-<script>
+
+        function eliminarPortada() {
+            if(confirm('¿Eliminar la foto de portada personalizada?')) {
+                localStorage.removeItem('kiara_hero_bg');
+                document.documentElement.style.setProperty('--hero-bg', 'url(\'https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=2574&auto=format&fit=crop\')');
+                alert('Portada restaurada a la original.');
+            }
+        }
+        function eliminarGaleria() {
+            if(confirm('¿Eliminar todas las fotos subidas a la galería?')) {
+                for(let i=0; i<6; i++) { localStorage.removeItem(`kiara_img_${i}`); }
+                document.getElementById('gallery-grid').innerHTML = `
+                    <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto<br><span style="font-size:0.8rem;">Sube una desde el Admin</span></div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+                    <div class="gallery-item"><div class="gallery-placeholder">📸<br>Sin foto</div></div>
+                `;
+                alert('Fotos eliminadas.');
+            }
+        }
+    
     // Cargar datos guardados en el navegador (localStorage)
     let DONADO = localStorage.getItem('kiara_donado') || 0;
     let DEUDA = localStorage.getItem('kiara_deuda') || 0;
@@ -450,6 +477,33 @@
             mostrarAviso();
         }
     
+        // Guardar foto de portada (CORREGIDO para CSS variables)
+        const heroFile = document.getElementById('hero-bg-upload').files[0];
+        if (heroFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const url = e.target.result;
+                localStorage.setItem('kiara_hero_bg', url);
+                document.documentElement.style.setProperty('--hero-bg', 'url(' + url + ')');
+            };
+            reader.readAsDataURL(heroFile);
+        }
+
+        // Guardar Aviso Urgente
+        const avisoTexto = document.getElementById('admin-aviso-texto').value;
+        localStorage.setItem('kiara_aviso_texto', avisoTexto);
+        const avisoFile = document.getElementById('admin-aviso-img').files[0];
+        if (avisoFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('kiara_aviso_img', e.target.result);
+                mostrarAviso();
+            };
+            reader.readAsDataURL(avisoFile);
+        } else {
+            mostrarAviso();
+        }
+    
     }
 
     // Cargar fotos guardadas al inicio
@@ -468,6 +522,6 @@
             }
         }
     }
-</script>
+
 </body>
 </html>
